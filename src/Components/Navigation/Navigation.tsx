@@ -20,6 +20,12 @@ const Navigation = () => {
   const [open, setOpen] = useState<boolean>(false);
   const matches = useMediaQuery("(max-width:640px)");
 
+  const closeDrawer = () => {
+    setTimeout(() => {
+      setOpen(false);
+    }, 150);
+  };
+
   return (
     <>
       <AppBar position="static">
@@ -67,7 +73,7 @@ const Navigation = () => {
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
       >
-        <MenuBar />
+        <MenuBar closeDrawer={closeDrawer} />
       </SwipeableDrawer>
     </>
   );

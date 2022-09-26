@@ -11,7 +11,11 @@ import { CollectionType } from "../../Routes/Collections";
 import { MyLink } from "./NavStyle.style";
 import MenuItems from "./MenuItems.component";
 
-const MenuCollections = () => {
+interface Props {
+  closeDrawer: () => void;
+}
+
+const MenuCollections = ({ closeDrawer }: Props) => {
   return (
     <Accordion elevation={0}>
       <AccordionSummary
@@ -25,13 +29,22 @@ const MenuCollections = () => {
       </AccordionSummary>
       <AccordionDetails>
         <List>
-          <MyLink to={`/collections/${CollectionType.HOUSEWARES}`}>
+          <MyLink
+            to={`/collections/${CollectionType.HOUSEWARES}`}
+            onClick={closeDrawer}
+          >
             <MenuItems title="HouseWares" image="/public/collection.png" />
           </MyLink>
-          <MyLink to={`/collections/${CollectionType.WALL_MOUNTED}`}>
+          <MyLink
+            to={`/collections/${CollectionType.WALL_MOUNTED}`}
+            onClick={closeDrawer}
+          >
             <MenuItems title="WallMounted" image="/public/collection.png" />
           </MyLink>
-          <MyLink to={`/collections/${CollectionType.MISC}`}>
+          <MyLink
+            to={`/collections/${CollectionType.MISC}`}
+            onClick={closeDrawer}
+          >
             <MenuItems title="Miscellaneous" image="/public/collection.png" />
           </MyLink>
         </List>

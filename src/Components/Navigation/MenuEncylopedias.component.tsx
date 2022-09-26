@@ -16,7 +16,11 @@ export interface MenuItemProps {
   image: string;
 }
 
-const MenuEncyclopedias = () => {
+interface Props {
+  closeDrawer: () => void;
+}
+
+const MenuEncyclopedias = ({ closeDrawer }: Props) => {
   return (
     <Accordion elevation={0}>
       <AccordionSummary
@@ -30,19 +34,34 @@ const MenuEncyclopedias = () => {
       </AccordionSummary>
       <AccordionDetails>
         <List>
-          <MyLink to={`/encyclopedia/${EncyclopediaType.BUGS}`}>
+          <MyLink
+            to={`/encyclopedia/${EncyclopediaType.BUGS}`}
+            onClick={closeDrawer}
+          >
             <MenuItems title="Bugs" image="/public/bugs.png" />
           </MyLink>
-          <MyLink to={`/encyclopedia/${EncyclopediaType.FISH}`}>
+          <MyLink
+            to={`/encyclopedia/${EncyclopediaType.FISH}`}
+            onClick={closeDrawer}
+          >
             <MenuItems title="Fish" image="/public/fish.png" />
           </MyLink>
-          <MyLink to={`/encyclopedia/${EncyclopediaType.SEA_CREATURES}`}>
+          <MyLink
+            to={`/encyclopedia/${EncyclopediaType.SEA_CREATURES}`}
+            onClick={closeDrawer}
+          >
             <MenuItems title="Sea Creatures" image="/public/seaCreatures.png" />
           </MyLink>
-          <MyLink to={`/encyclopedia/${EncyclopediaType.FOSSILS}`}>
+          <MyLink
+            to={`/encyclopedia/${EncyclopediaType.FOSSILS}`}
+            onClick={closeDrawer}
+          >
             <MenuItems title="Fossils" image="/public/fossils.png" />
           </MyLink>
-          <MyLink to={`/encyclopedia/${EncyclopediaType.ARTS}`}>
+          <MyLink
+            to={`/encyclopedia/${EncyclopediaType.ARTS}`}
+            onClick={closeDrawer}
+          >
             <MenuItems title="Arts" image="/public/art.png" />
           </MyLink>
         </List>
