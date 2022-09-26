@@ -1,4 +1,3 @@
-import * as React from "react";
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
@@ -15,9 +14,9 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      light: "#a7daea",
+      light: "#a6d4fa",
       main: "#92D1E5",
-      dark: "#6692a0",
+      dark: "#648dae",
       contrastText: "#fff",
     },
     secondary: {
@@ -25,6 +24,9 @@ const theme = createTheme({
       main: "#03a886",
       dark: "#02755d",
       contrastText: "#000",
+    },
+    info: {
+      main: "#fff",
     },
   },
 });
