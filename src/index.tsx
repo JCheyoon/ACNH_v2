@@ -5,11 +5,17 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@mui/material";
 import theme from "./Context/themeContext";
+import { GameDataProvider } from "./Context/gameDataContext";
+import { UiProvider } from "./Context/uiContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
-      <App />
+      <UiProvider>
+        <GameDataProvider>
+          <App />
+        </GameDataProvider>
+      </UiProvider>
     </ThemeProvider>
   </BrowserRouter>
 );

@@ -6,11 +6,13 @@ import * as React from "react";
 import Villagers from "./Routes/Villagers";
 import Encyclopedias from "./Routes/Encyclopedias";
 import Collections from "./Routes/Collections";
+import ScrollToTopBtn from "./UI/ScrollToTopBtn.component";
 
 function App() {
   return (
     <>
       <Navigation />
+      <ScrollToTopBtn />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Authentication />} />
