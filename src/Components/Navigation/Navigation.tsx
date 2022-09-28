@@ -8,15 +8,16 @@ import {
   SwipeableDrawer,
   Toolbar,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MenuBar from "./MenuBar.component";
 import MyLogo from "./MyLogo.component";
 import NavCollection from "./NavCollection.component";
 import NavEncyclopedias from "./NavEncyclopedias.component";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navigation = () => {
+  const { pathname } = useLocation();
   const [open, setOpen] = useState<boolean>(false);
   const matches = useMediaQuery("(max-width:640px)");
 
@@ -24,6 +25,13 @@ const Navigation = () => {
     setTimeout(() => {
       setOpen(false);
     }, 150);
+  };
+  const buttonSX = {
+    fontWeight: 600,
+    color: "var(--white)",
+    "&:hover, &.active": {
+      backgroundColor: "rgba(0, 0, 0, 0.04)",
+    },
   };
 
   return (
@@ -46,12 +54,18 @@ const Navigation = () => {
           {matches ? null : (
             <>
               <Link to={"/"}>
-                <Button sx={{ fontWeight: 600 }} color="info">
+                <Button
+                  sx={buttonSX}
+                  className={pathname === "/" ? "active" : ""}
+                >
                   Island
                 </Button>
               </Link>
               <Link to={"/villagers"}>
-                <Button sx={{ fontWeight: 600 }} color="info">
+                <Button
+                  sx={buttonSX}
+                  className={pathname === "/villagers" ? "active" : ""}
+                >
                   Villagers
                 </Button>
               </Link>
@@ -59,9 +73,7 @@ const Navigation = () => {
               <NavCollection />
               <Box sx={{ flexGrow: 2 }} />
               <Link to={"/auth"}>
-                <Button sx={{ fontWeight: 600 }} color="info">
-                  Login
-                </Button>
+                <Button sx={buttonSX}>Login</Button>
               </Link>
             </>
           )}

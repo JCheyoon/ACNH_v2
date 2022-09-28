@@ -8,7 +8,6 @@ const ScrollToTopBtn = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
-      console.log(window.scrollY);
       setIsScroll(window.scrollY > 180);
     });
   }, []);

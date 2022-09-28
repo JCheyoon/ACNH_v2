@@ -1,13 +1,16 @@
 import styled from "styled-components";
 
-export const VillagerCardItem = styled.div`
-  background-color: white;
+export const MyCardItem = styled.div`
+  background-color: var(--white);
   color: black;
   padding: 5px;
   margin: 5px;
   text-align: left;
   border-radius: 5px;
   border: 1px solid var(--light-gray);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 
   &.title {
     background-color: var(--primary-main);
@@ -45,7 +48,7 @@ export const CatchPhraseBubble = styled.div`
 
 export const GridBox = styled.div`
   padding-top: 40px;
-  width: 400px;
+  width: 350px;
   justify-content: center;
 
   @media (min-width: 900px) {
@@ -58,13 +61,14 @@ export const GridBox = styled.div`
 
 export const ScrollUpStyLe = styled.div`
   position: fixed;
+  z-index: 11;
   right: 25px;
   bottom: 25px;
   opacity: 0;
   transition: ease-in-out 300ms;
   pointer-events: none;
   &.visible {
-    opacity: 0.8;
+    opacity: 1;
     pointer-events: auto;
     cursor: pointer;
   }

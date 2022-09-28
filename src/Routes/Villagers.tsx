@@ -1,9 +1,10 @@
 import { Box, CircularProgress } from "@mui/material";
 import VillagersFilter from "../UI/VillagersFilter.component";
-import MyGrid from "../UI/MyGrid.component";
+import VillagerGrid from "../UI/VillagerGrid.component";
 import { useEffect } from "react";
 import { useContextGameData } from "../Context/gameDataContext";
 import { useContextUi } from "../Context/uiContext";
+import VillagersSearchBar from "../UI/VillagersSearchBar.component";
 
 const Villagers = () => {
   const { fetchVillagers } = useContextGameData();
@@ -38,7 +39,8 @@ const Villagers = () => {
       }}
     >
       <VillagersFilter />
-      <MyGrid />
+      <VillagersSearchBar />
+      <VillagerGrid />
     </Box>
   );
 };

@@ -1,6 +1,4 @@
-import { red } from "@mui/material/colors";
 import {
-  Avatar,
   Box,
   Card,
   CardContent,
@@ -10,11 +8,7 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import {
-  CatchPhrase,
-  VillagerCardItem,
-  CatchPhraseBubble,
-} from "./CardStyle.style";
+import { CatchPhrase, MyCardItem, CatchPhraseBubble } from "./CardStyle.style";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import HomeIcon from "@mui/icons-material/Home";
 import MaleIcon from "@mui/icons-material/Male";
@@ -40,7 +34,7 @@ const VillagerCard = ({ villager }: Props) => {
   return (
     <Card sx={{ width: 345, position: "relative", overflow: "unset" }}>
       <CardHeader
-        sx={{ backgroundColor: "#92d1e5" }}
+        sx={{ backgroundColor: "var(--primary-main)" }}
         avatar={
           <CardMedia component="img" height="40" image={iconUrl} alt="icon" />
         }
@@ -48,13 +42,17 @@ const VillagerCard = ({ villager }: Props) => {
           <>
             <IconButton
               aria-label="add to favorites"
-              sx={{ backgroundColor: "white", mr: 1, color: "#dadada" }}
+              sx={{
+                backgroundColor: "var(--white)",
+                mr: 1,
+                color: "var(--gray)",
+              }}
             >
               <FavoriteIcon />
             </IconButton>
             <IconButton
               aria-label="add to my Villager"
-              sx={{ backgroundColor: "white", color: "#dadada" }}
+              sx={{ backgroundColor: "var(--white)", color: "var(--gray)" }}
             >
               <HomeIcon />
             </IconButton>
@@ -65,7 +63,7 @@ const VillagerCard = ({ villager }: Props) => {
             <Typography
               style={{
                 textAlign: "start",
-                color: "white",
+                color: "var(--white)",
                 paddingRight: 3,
               }}
               display={"inline"}
@@ -87,24 +85,24 @@ const VillagerCard = ({ villager }: Props) => {
         height="345"
         image={imageUrl}
         alt={name}
-        sx={{ p: 3, backgroundColor: "#f6f6f6" }}
+        sx={{ p: 3, backgroundColor: "var(--light-gray)" }}
       />
       <CatchPhrase>
         <CatchPhraseBubble />
         <div>{catchPhrase}</div>
       </CatchPhrase>
-      <CardContent sx={{ backgroundColor: "#f6f6f6" }}>
+      <CardContent sx={{ backgroundColor: "var(--light-gray)" }}>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
             <Grid item xs={4}>
-              <VillagerCardItem className="title">Personality</VillagerCardItem>
-              <VillagerCardItem className="title">Birthday</VillagerCardItem>
-              <VillagerCardItem className="title">Species</VillagerCardItem>
+              <MyCardItem className="title">Personality</MyCardItem>
+              <MyCardItem className="title">Birthday</MyCardItem>
+              <MyCardItem className="title">Species</MyCardItem>
             </Grid>
             <Grid item xs={8}>
-              <VillagerCardItem>{personality}</VillagerCardItem>
-              <VillagerCardItem>{birthdayString}</VillagerCardItem>
-              <VillagerCardItem>{species}</VillagerCardItem>
+              <MyCardItem>{personality}</MyCardItem>
+              <MyCardItem>{birthdayString}</MyCardItem>
+              <MyCardItem>{species}</MyCardItem>
             </Grid>
           </Grid>
         </Box>

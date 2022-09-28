@@ -21,12 +21,19 @@ interface Props {
 }
 
 const MenuEncyclopedias = ({ closeDrawer }: Props) => {
+  const typoSX = {
+    "&:hover": {
+      backgroundColor: "rgba(0, 0, 0, 0.04)",
+    },
+  };
+
   return (
     <Accordion elevation={0}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
         id="panel1a-header"
+        sx={typoSX}
       >
         <Typography sx={{ fontWeight: 600 }} color="secondary">
           Encyclopedias

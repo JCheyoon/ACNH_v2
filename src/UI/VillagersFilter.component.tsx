@@ -1,8 +1,14 @@
 import { Button, ButtonGroup } from "@mui/material";
+import { useContextGameData } from "../Context/gameDataContext";
 
 const VillagersFilter = () => {
+  const { filterByPersonality } = useContextGameData();
   return (
-    <ButtonGroup variant="text" aria-label="outlined primary button group">
+    <ButtonGroup
+      variant="text"
+      aria-label="outlined primary button group"
+      sx={{ d: "flex", flexWrap: "wrap" }}
+    >
       {[
         "All",
         "Cranky",
@@ -14,7 +20,11 @@ const VillagersFilter = () => {
         "Snooty",
         "Uchi",
       ].map((personality, index) => (
-        <Button key={index} sx={{ fontWeight: 600 }}>
+        <Button
+          onClick={() => filterByPersonality(personality)}
+          key={index}
+          sx={{ fontWeight: 600 }}
+        >
           {personality}
         </Button>
       ))}

@@ -1,29 +1,47 @@
 import { useParams } from "react-router-dom";
-import Arts from "../Components/Encyclopedia/Arts.component";
-import Bugs from "../Components/Encyclopedia/Bugs.component";
-import Fish from "../Components/Encyclopedia/Fish.component";
-import Fossils from "../Components/Encyclopedia/Fossils.component";
-import SeaCreatures from "../Components/Encyclopedia/SeaCreatures.component";
+import { Box, Grid } from "@mui/material";
+import { GridBox } from "../UI/CardStyle.style";
+import { useEffect } from "react";
+import ItemsCard from "../UI/ItemsCard.component";
+import { useContextGameData } from "../Context/gameDataContext";
 
 export enum EncyclopediaType {
   BUGS = "bugs",
   FISH = "fish",
   FOSSILS = "fossils",
-  SEA_CREATURES = "seaCreatures",
-  ARTS = "arts",
+  SEA_CREATURES = "sea",
+  ARTS = "art",
 }
 
 const Encyclopedias = () => {
-  const { type } = useParams<{ type: string }>();
+  const { type } = useParams<{ type: EncyclopediaType }>();
+  const { fetchEncyclopedia, allEncyclopedia } = useContextGameData();
+
+  useEffect(() => {
+    if (!type) return;
+    fetchEncyclopedia(type);
+  }, [type]);
 
   return (
-    <>
-      {type === EncyclopediaType.ARTS && <Arts />}
-      {type === EncyclopediaType.BUGS && <Bugs />}
-      {type === EncyclopediaType.FISH && <Fish />}
-      {type === EncyclopediaType.FOSSILS && <Fossils />}
-      {type === EncyclopediaType.SEA_CREATURES && <SeaCreatures />}
-    </>
+    <Box
+      sx={{
+        display: "flex ",
+        alignItems: "center",
+        justifyContents: "center",
+        flexDirection: "column",
+        p: 5,
+      }}
+    >
+      <GridBox>
+        <Grid container spacing={2}>
+          {allEncyclopedia.map((item, index) => (
+            <Grid item xs={12} md={6} lg={4} key={index} flexGrow={0}>
+              <ItemsCard item={item} />
+            </Grid>
+          ))}
+        </Grid>
+      </GridBox>
+    </Box>
   );
 };
 
