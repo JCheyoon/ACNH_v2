@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
 export const MyCardItem = styled.div`
+  display: flex;
+  align-items: center;
   background-color: var(--white);
   color: black;
   padding: 5px;
@@ -11,8 +13,10 @@ export const MyCardItem = styled.div`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  height: 40px;
 
   &.title {
+    justify-content: center;
     background-color: var(--primary-main);
     color: white;
     text-align: center;

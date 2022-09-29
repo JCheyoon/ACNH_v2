@@ -3,14 +3,15 @@ import {
   Box,
   Card,
   CardContent,
+  Chip,
   Grid,
   Typography,
 } from "@mui/material";
-import { EncyclopediaData } from "../Context/gameDataContext";
+import { ItemsData } from "../Context/gameDataContext";
 import { MyCardItem } from "./CardStyle.style";
 
 interface Props {
-  item: EncyclopediaData;
+  item: ItemsData;
 }
 
 const ItemsCard = ({ item }: Props) => {
@@ -27,6 +28,9 @@ const ItemsCard = ({ item }: Props) => {
     buyPrice,
     isAllDay,
     isAllYear,
+    variants,
+    size,
+    isDIY,
   } = item;
 
   return (
@@ -80,10 +84,13 @@ const ItemsCard = ({ item }: Props) => {
               {(time || (!time && isAllDay)) && (
                 <MyCardItem className="title">Time</MyCardItem>
               )}
-              {buyPrice && <MyCardItem className="title">BuyPrice</MyCardItem>}
+              {(buyPrice || isDIY) && (
+                <MyCardItem className="title">BuyPrice</MyCardItem>
+              )}
               {sellPrice && (
                 <MyCardItem className="title">SellPrice</MyCardItem>
               )}
+              {size && <MyCardItem className="title">Size</MyCardItem>}
             </Grid>
             <Grid item xs={8}>
               {location && <MyCardItem>{location}</MyCardItem>}
@@ -96,10 +103,46 @@ const ItemsCard = ({ item }: Props) => {
               {time && <MyCardItem>{time}</MyCardItem>}
               {!time && isAllDay && <MyCardItem>All day</MyCardItem>}
               {buyPrice && <MyCardItem>{buyPrice}</MyCardItem>}
+              {!buyPrice && isDIY && <MyCardItem>DIY items</MyCardItem>}
               {sellPrice && <MyCardItem>{sellPrice}</MyCardItem>}
+              {size && (
+                <MyCardItem>
+                  <img style={{ width: "25px" }} src={`/${size}.png`} />
+                </MyCardItem>
+              )}
             </Grid>
           </Grid>
         </Box>
+        {variants && variants.length > 0 && (
+          <Box
+            sx={{
+              backgroundColor: "var(--white)",
+              borderRadius: 1,
+              width: 300,
+              mt: 1,
+            }}
+          >
+            <Box>
+              <MyCardItem className="title">Variants</MyCardItem>
+            </Box>
+            <Box sx={{ overflowX: "auto", display: "flex", p: 2 }}>
+              {variants &&
+                variants.length > 0 &&
+                variants.map((variant, index) => (
+                  <Avatar
+                    key={index}
+                    sx={{
+                      width: 60,
+                      height: 60,
+                      backgroundColor: "var(--light-gray)",
+                      marginRight: 1,
+                    }}
+                    src={variant}
+                  />
+                ))}
+            </Box>
+          </Box>
+        )}
       </CardContent>
     </Card>
   );

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { useContextUi } from "./uiContext";
 import { EncyclopediaType } from "../Routes/Encyclopedias";
+import { CollectionType } from "../Routes/Collections";
 
 //villagers Data
 interface VillagerResponse {
@@ -42,7 +43,7 @@ function mapVillagerData(response: VillagerResponse): VillagerData {
 }
 
 //Items Data
-interface EncyclopediaResponse {
+interface ItemsResponse {
   id: number;
   name: { "name-USen": string };
   availability?: {
@@ -59,9 +60,12 @@ interface EncyclopediaResponse {
   icon_uri: string;
   "sell-price"?: string;
   "buy-price"?: string;
+  variant?: string;
+  size?: string;
+  isDIY?: boolean;
 }
 
-export interface EncyclopediaData {
+export interface ItemsData {
   id: number;
   name: string;
   imageUrl: string;
@@ -75,9 +79,12 @@ export interface EncyclopediaData {
   buyPrice?: string;
   isAllDay?: boolean;
   isAllYear?: boolean;
+  variants?: string[];
+  size?: string;
+  isDIY?: boolean;
 }
 
-function mapEncyclopediaData(response: EncyclopediaResponse): EncyclopediaData {
+function mapItemsData(response: ItemsResponse): ItemsData {
   return {
     buyPrice: response["buy-price"],
     id: response.id,
@@ -92,14 +99,17 @@ function mapEncyclopediaData(response: EncyclopediaResponse): EncyclopediaData {
     time: response.availability?.time,
     isAllDay: response.availability?.isAllDay,
     isAllYear: response.availability?.isAllYear,
+    size: response.size,
+    isDIY: response.isDIY,
   };
 }
 
 /////context
 
-export type ContextType = {
-  allEncyclopedia: EncyclopediaData[];
-  fetchEncyclopedia: (address: EncyclopediaType) => Promise<void>;
+export type GameDataContextType = {
+  filteredItems: ItemsData[];
+  fetchItems: (address: EncyclopediaType | CollectionType) => Promise<void>;
+  searchByName: (searchField: string) => void;
   fetchVillagers: () => Promise<void>;
   filterByPersonality: (personality: string) => void;
   filteredVillagers: VillagerData[];
@@ -110,19 +120,20 @@ type ProviderProps = {
   children: React.ReactNode;
 };
 
-const GameDataContext = createContext({} as ContextType);
+const GameDataContext = createContext({} as GameDataContextType);
 
 export const GameDataProvider = ({ children }: ProviderProps) => {
   const { setLoading } = useContextUi();
-  const [allEncyclopedia, setAllEncyclopedia] = useState<EncyclopediaData[]>(
-    []
-  );
+  const [allItems, setAllItems] = useState<ItemsData[]>([]);
+  const [filteredItems, setFilteredItems] = useState<ItemsData[]>([]);
   const [allVillagers, setAllVillagers] = useState<VillagerData[]>([]);
   const [filteredVillagers, setFilteredVillagers] = useState<VillagerData[]>(
     []
   );
 
-  const fetchEncyclopedia = async function (address: EncyclopediaType) {
+  const fetchItems = async function (
+    address: EncyclopediaType | CollectionType
+  ) {
     try {
       setLoading(true);
       const res = await fetch(`https://acnhapi.com/v1a/${address}/`);
@@ -130,8 +141,20 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
       if (!data) {
         return;
       }
-      const encyclopedias = data.map(mapEncyclopediaData);
-      setAllEncyclopedia(encyclopedias);
+      const items = data.map((item: ItemsResponse | ItemsResponse[]) => {
+        if (Array.isArray(item)) {
+          const myItem = mapItemsData(item[0]);
+          const rawVariants = item
+            .map((i: ItemsResponse) => i.image_uri)
+            .filter((i: string | undefined) => !!i) as string[];
+          myItem.variants = Array.from(new Set(rawVariants));
+          return myItem;
+        } else {
+          return mapItemsData(item);
+        }
+      });
+      setAllItems(items);
+      setFilteredItems([...items]);
     } catch (e) {
       console.log(e);
       // TODO handle error
@@ -143,6 +166,13 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
   const fetchVillagers = async function () {
     try {
       setLoading(true);
+      const storedItems = localStorage.getItem("villagers");
+      if (storedItems) {
+        const villagers = JSON.parse(storedItems);
+        setAllVillagers(villagers);
+        setFilteredVillagers([...villagers]);
+        return;
+      }
       const res = await fetch("https://acnhapi.com/v1a/villagers/");
       const data = await res.json();
       if (!data) {
@@ -151,6 +181,7 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
       const villagers = data.map(mapVillagerData);
       setAllVillagers([...villagers]);
       setFilteredVillagers([...villagers]);
+      localStorage.setItem("villagers", JSON.stringify(villagers));
     } catch (e) {
       console.log(e);
       // TODO handle error
@@ -185,9 +216,21 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
     setFilteredVillagers(filtered);
   };
 
+  const searchByName = (searchField: string) => {
+    if (searchField === "") {
+      setFilteredItems([...allItems]);
+      return;
+    }
+    const filtered = allItems.filter(({ name }) => {
+      return name.toLowerCase().includes(searchField.toLowerCase());
+    });
+    setFilteredItems(filtered);
+  };
+
   const value = {
-    allEncyclopedia,
-    fetchEncyclopedia,
+    filteredItems,
+    fetchItems,
+    searchByName,
     fetchVillagers,
     filteredVillagers,
     filterByPersonality,

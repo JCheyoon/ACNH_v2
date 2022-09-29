@@ -36,6 +36,7 @@ const Villagers = () => {
         justifyContents: "center",
         flexDirection: "column",
         p: 5,
+        mt: 8,
       }}
     >
       <VillagersFilter />

@@ -5,16 +5,16 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "../Components/Hooks/CustomHook";
 import { useContextGameData } from "../Context/gameDataContext";
 
-const VillagersSearchBar = () => {
+const ItemSearchBar = () => {
   const matches = useMediaQuery("(min-width:600px)");
 
-  const { searchByNameAndSpecies } = useContextGameData();
+  const { searchByName } = useContextGameData();
 
   const [keyWord, setKeyWord] = useState<string>("");
   const onTypeKeyWord = useDebounce(setKeyWord, 500);
 
   useEffect(() => {
-    searchByNameAndSpecies(keyWord);
+    searchByName(keyWord);
   }, [keyWord]);
 
   return (
@@ -31,13 +31,13 @@ const VillagersSearchBar = () => {
     >
       <InputBase
         sx={{ ml: 1, flex: 1, p: "10px" }}
-        placeholder="Search Villagers by name or species"
-        inputProps={{ "aria-label": "search Villagers" }}
+        placeholder="Search Items by name"
+        inputProps={{ "aria-label": "search Items" }}
         onChange={(event) => onTypeKeyWord(event.target.value)}
       />
-      <SearchIcon sx={{ mr: 3 }} />
+      <SearchIcon sx={{ mr: 2 }} />
     </Paper>
   );
 };
 
-export default VillagersSearchBar;
+export default ItemSearchBar;

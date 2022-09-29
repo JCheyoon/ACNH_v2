@@ -1,4 +1,5 @@
 import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   Divider,
   List,
@@ -13,12 +14,15 @@ import MyLogo from "./MyLogo.component";
 import { MenuBarLink } from "./NavStyle.style";
 import MenuEncyclopedias from "./MenuEncylopedias.component";
 import MenuCollections from "./MenuCollections.component";
+import { useAuthContextData } from "../../Context/authContext";
 
 interface Props {
   closeDrawer: () => void;
 }
 
 const MenuBar = ({ closeDrawer }: Props) => {
+  const { isLoggedIn, handleLogout } = useAuthContextData();
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <List>
@@ -44,16 +48,29 @@ const MenuBar = ({ closeDrawer }: Props) => {
       </List>
       <Box sx={{ flexGrow: 1 }} />
       <Divider />
-      <MenuBarLink to={"/auth"} onClick={closeDrawer}>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ height: 50 }}>
-            <ListItemIcon>{<LoginIcon />}</ListItemIcon>
-            <Typography sx={{ fontWeight: 600 }} color="secondary">
-              LogIn
-            </Typography>
-          </ListItemButton>
-        </ListItem>
-      </MenuBarLink>
+      {isLoggedIn ? (
+        <MenuBarLink to={"/"} onClick={closeDrawer}>
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleLogout} sx={{ height: 50 }}>
+              <ListItemIcon>{<LogoutIcon />}</ListItemIcon>
+              <Typography sx={{ fontWeight: 600 }} color="secondary">
+                Logout
+              </Typography>
+            </ListItemButton>
+          </ListItem>
+        </MenuBarLink>
+      ) : (
+        <MenuBarLink to={"/auth"} onClick={closeDrawer}>
+          <ListItem disablePadding>
+            <ListItemButton sx={{ height: 50 }}>
+              <ListItemIcon>{<LoginIcon />}</ListItemIcon>
+              <Typography sx={{ fontWeight: 600 }} color="secondary">
+                LogIn
+              </Typography>
+            </ListItemButton>
+          </ListItem>
+        </MenuBarLink>
+      )}
     </Box>
   );
 };

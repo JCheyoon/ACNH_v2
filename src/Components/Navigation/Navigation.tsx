@@ -8,15 +8,17 @@ import {
   SwipeableDrawer,
   Toolbar,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MenuBar from "./MenuBar.component";
 import MyLogo from "./MyLogo.component";
 import NavCollection from "./NavCollection.component";
 import NavEncyclopedias from "./NavEncyclopedias.component";
 import { Link, useLocation } from "react-router-dom";
+import { useAuthContextData } from "../../Context/authContext";
 
 const Navigation = () => {
+  const { isLoggedIn, handleLogout } = useAuthContextData();
   const { pathname } = useLocation();
   const [open, setOpen] = useState<boolean>(false);
   const matches = useMediaQuery("(max-width:640px)");
@@ -36,7 +38,7 @@ const Navigation = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar sx={{ justifyContent: "space-between" }}>
           {matches ? (
             <IconButton
@@ -72,9 +74,17 @@ const Navigation = () => {
               <NavEncyclopedias />
               <NavCollection />
               <Box sx={{ flexGrow: 2 }} />
-              <Link to={"/auth"}>
-                <Button sx={buttonSX}>Login</Button>
-              </Link>
+              {isLoggedIn ? (
+                <Link to={"/"}>
+                  <Button onClick={handleLogout} sx={buttonSX}>
+                    Logout
+                  </Button>
+                </Link>
+              ) : (
+                <Link to={"/auth"}>
+                  <Button sx={buttonSX}>Login</Button>
+                </Link>
+              )}
             </>
           )}
         </Toolbar>

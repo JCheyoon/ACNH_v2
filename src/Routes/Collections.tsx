@@ -1,23 +1,66 @@
 import { useParams } from "react-router-dom";
-import HouseWares from "../Components/Collection/HouseWares.component";
-import WallMounted from "../Components/Collection/WallMounted.component";
-import Miscellaneous from "../Components/Collection/Miscellaneous.component";
+
+import { Box, CircularProgress, Grid } from "@mui/material";
+import ItemSearchBar from "../UI/ItemSearchBar.component";
+import { GridBox } from "../UI/CardStyle.style";
+import ItemsCard from "../UI/ItemsCard.component";
+import { useContextGameData } from "../Context/gameDataContext";
+import { useEffect } from "react";
+import { useContextUi } from "../Context/uiContext";
 
 export enum CollectionType {
-  HOUSEWARES = "houseWares",
-  WALL_MOUNTED = "wallMounted",
-  MISC = "Miscellaneous",
+  HOUSEWARES = "houseware",
+  WALL_MOUNTED = "wallmounted",
+  MISC = "misc",
 }
 
 const Collections = () => {
-  const { type } = useParams<{ type: string }>();
+  const { type } = useParams<{ type: CollectionType }>();
+  const { isLoading } = useContextUi();
+
+  const { fetchItems, filteredItems } = useContextGameData();
+
+  useEffect(() => {
+    if (!type) return;
+    fetchItems(type);
+  }, [type]);
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          padding: "30vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
-    <div>
-      {type === CollectionType.HOUSEWARES && <HouseWares />}
-      {type === CollectionType.WALL_MOUNTED && <WallMounted />}
-      {type === CollectionType.MISC && <Miscellaneous />}
-    </div>
+    <Box
+      sx={{
+        display: "flex ",
+        alignItems: "center",
+        justifyContents: "center",
+        flexDirection: "column",
+        p: 5,
+        mt: 8,
+      }}
+    >
+      <ItemSearchBar />
+      <GridBox>
+        <Grid container spacing={2}>
+          {filteredItems.map((item, index) => (
+            <Grid item xs={12} md={6} lg={4} key={index} flexGrow={0}>
+              <ItemsCard item={item} />
+            </Grid>
+          ))}
+        </Grid>
+      </GridBox>
+    </Box>
   );
 };
 

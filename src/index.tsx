@@ -7,14 +7,17 @@ import { ThemeProvider } from "@mui/material";
 import theme from "./Context/themeContext";
 import { GameDataProvider } from "./Context/gameDataContext";
 import { UiProvider } from "./Context/uiContext";
+import { AuthProvider } from "./Context/authContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <BrowserRouter>
     <ThemeProvider theme={theme}>
       <UiProvider>
-        <GameDataProvider>
-          <App />
-        </GameDataProvider>
+        <AuthProvider>
+          <GameDataProvider>
+            <App />
+          </GameDataProvider>
+        </AuthProvider>
       </UiProvider>
     </ThemeProvider>
   </BrowserRouter>
