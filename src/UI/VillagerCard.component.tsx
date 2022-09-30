@@ -13,7 +13,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import HomeIcon from "@mui/icons-material/Home";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
-import { VillagerData } from "../Context/gameDataContext";
+import { useContextGameData, VillagerData } from "../Context/gameDataContext";
+import { useAuthContextData } from "../Context/authContext";
 
 interface Props {
   villager: VillagerData;
@@ -21,6 +22,7 @@ interface Props {
 
 const VillagerCard = ({ villager }: Props) => {
   const {
+    id,
     name,
     species,
     catchPhrase,
@@ -30,6 +32,8 @@ const VillagerCard = ({ villager }: Props) => {
     personality,
     birthdayString,
   } = villager;
+  const { isLoggedIn } = useAuthContextData();
+  const { handleAddVillager, myVillagers } = useContextGameData();
 
   return (
     <Card sx={{ width: 345, position: "relative", overflow: "unset" }}>
@@ -39,24 +43,35 @@ const VillagerCard = ({ villager }: Props) => {
           <CardMedia component="img" height="40" image={iconUrl} alt="icon" />
         }
         action={
-          <>
-            <IconButton
-              aria-label="add to favorites"
-              sx={{
-                backgroundColor: "var(--white)",
-                mr: 1,
-                color: "var(--gray)",
-              }}
-            >
-              <FavoriteIcon />
-            </IconButton>
-            <IconButton
-              aria-label="add to my Villager"
-              sx={{ backgroundColor: "var(--white)", color: "var(--gray)" }}
-            >
-              <HomeIcon />
-            </IconButton>
-          </>
+          isLoggedIn ? (
+            <>
+              <IconButton
+                aria-label="add to favorites"
+                sx={{
+                  backgroundColor: "var(--white)",
+                  mr: 1,
+                  color: "var(--gray)",
+                }}
+              >
+                <FavoriteIcon />
+              </IconButton>
+              <IconButton
+                onClick={
+                  myVillagers.includes(id)
+                    ? () => {
+                        /*removeFunction*/
+                      }
+                    : () => handleAddVillager(id)
+                }
+                sx={{
+                  backgroundColor: "var(--white)",
+                  color: myVillagers.includes(id) ? "red" : "var(--gray)",
+                }}
+              >
+                <HomeIcon />
+              </IconButton>
+            </>
+          ) : null
         }
         title={
           <Box sx={{ display: "flex", alignItems: "center" }}>

@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState } from "react";
 import { useContextUi } from "./uiContext";
 import { EncyclopediaType } from "../Routes/Encyclopedias";
 import { CollectionType } from "../Routes/Collections";
+import { useAuthContextData } from "./authContext";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 //villagers Data
 interface VillagerResponse {
@@ -114,6 +116,9 @@ export type GameDataContextType = {
   filterByPersonality: (personality: string) => void;
   filteredVillagers: VillagerData[];
   searchByNameAndSpecies: (searchField: string) => void;
+  myVillagers: number[];
+  myFavorites: number[];
+  handleAddVillager: (villagerId: number) => Promise<void>;
 };
 
 type ProviderProps = {
@@ -130,6 +135,10 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
   const [filteredVillagers, setFilteredVillagers] = useState<VillagerData[]>(
     []
   );
+  const [myVillagers, setMyVillagers] = useState<number[]>([]);
+  const [myFavorites, setMyFavorites] = useState<number[]>([]);
+
+  const { token } = useAuthContextData();
 
   const fetchItems = async function (
     address: EncyclopediaType | CollectionType
@@ -227,6 +236,23 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
     setFilteredItems(filtered);
   };
 
+  const handleAddVillager = async (villagerId: number) => {
+    try {
+      const response = await fetch(`${BASE_URL}/village/add`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ villagerId }),
+      });
+      const { villagers } = await response.json();
+      setMyVillagers(villagers);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const value = {
     filteredItems,
     fetchItems,
@@ -235,6 +261,9 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
     filteredVillagers,
     filterByPersonality,
     searchByNameAndSpecies,
+    myVillagers,
+    myFavorites,
+    handleAddVillager,
   };
   return (
     <GameDataContext.Provider value={value}>

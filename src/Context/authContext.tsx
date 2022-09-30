@@ -1,12 +1,15 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAxios } from "../Components/Hooks/useAxios";
 
 const STORAGE_KEY = "acnh-user";
+const ONE_DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
 
 type AuthContextType = {
   isLoggedIn: boolean;
   handleLogin: (loginResponse: LoginResponse) => void;
   handleLogout: () => void;
+  token: string | undefined;
 };
 
 type ProviderProps = {
@@ -15,7 +18,7 @@ type ProviderProps = {
 
 interface LoginResponse {
   token: string;
-  expiresAt: string;
+  expiresAt: number;
   email: string;
   id: string;
 }
@@ -23,9 +26,41 @@ interface LoginResponse {
 const AuthContext = createContext({} as AuthContextType);
 
 export const AuthProvider = ({ children }: ProviderProps) => {
+  const { post } = useAxios();
+
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [token, setToken] = useState<string>();
+
+  useEffect(() => {
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    if (!storedData) return;
+
+    const userData = JSON.parse(storedData);
+    const { token, expiresAt } = userData;
+    const expires = Number(expiresAt);
+    const now = new Date().getTime();
+
+    const expired = expires < now;
+
+    if (expired) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+
+    const timeToExpiry = expires - now;
+
+    if (timeToExpiry < ONE_DAY_IN_MILLIS) {
+      refreshToken(userData, token);
+    } else {
+      setTimeout(() => {
+        refreshToken(userData, token);
+      }, timeToExpiry - ONE_DAY_IN_MILLIS);
+    }
+
+    setToken(token);
+    setIsLoggedIn(true);
+  }, []);
 
   const handleLogin = (loginResponse: LoginResponse) => {
     const { token } = loginResponse;
@@ -40,10 +75,32 @@ export const AuthProvider = ({ children }: ProviderProps) => {
     navigate("/");
   };
 
+  const refreshToken = async (userInfo: LoginResponse, token: string) => {
+    try {
+      const { token: newToken, expiresAt: newExpiry } = await post(
+        "/user/token-refresh",
+        undefined,
+        token
+      );
+      setToken(newToken);
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          ...userInfo,
+          token: newToken,
+          expiresAt: newExpiry,
+        })
+      );
+    } catch (e) {
+      console.log("Could not refresh token", e);
+    }
+  };
+
   const value = {
     isLoggedIn,
     handleLogin,
     handleLogout,
+    token,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

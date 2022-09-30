@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { useAuthContextData } from "../Context/authContext";
 import { useNavigate } from "react-router-dom";
+import { useAxios } from "../Components/Hooks/useAxios";
 
 enum FormType {
   LOGIN = "login",
@@ -19,13 +20,15 @@ const defaultFormValue = {
   password: "",
 };
 
-const BASE_URL = import.meta.env.VITE_API_URL;
-
 const Authentication = () => {
+  const { post } = useAxios();
+
   const navigate = useNavigate();
   const { handleLogin } = useAuthContextData();
   const [formType, setFormType] = useState<FormType>(FormType.LOGIN);
   const [formFields, setFormFields] = useState(defaultFormValue);
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const { email, password } = formFields;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -33,19 +36,26 @@ const Authentication = () => {
 
     if (formType === FormType.LOGIN) {
       try {
-        const response = await fetch(`${BASE_URL}/user/login`, {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(formFields),
-        });
-        const data = await response.json();
-        handleLogin(data);
+        const response = await post("/user/login", formFields);
+        handleLogin(response.data);
         navigate("/");
+      } catch (e) {
+        if ((e as any)?.response?.data?.message === "INVALID_CREDENTIALS") {
+          alert("Incorrect password or email");
+        } else if ((e as any)?.message[0].message === "INVALID_FORMAT") {
+          alert("email not registered");
+        }
+      }
+    } else if (formType === FormType.SIGNUP) {
+      try {
+        await post("/user/signup", formFields);
+        setFormType(FormType.LOGIN);
+        resetForm();
       } catch (e) {
         console.log(e);
       }
+    } else {
+      return;
     }
   };
 
@@ -65,6 +75,10 @@ const Authentication = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target as HTMLInputElement;
     setFormFields({ ...formFields, [name]: value });
+  };
+  const resetForm = () => {
+    setFormFields({ email: "", password: "" });
+    setConfirmPassword("");
   };
   return (
     <Container component="main" maxWidth="xs" sx={{ p: 5, mt: 8 }}>
@@ -118,9 +132,24 @@ const Authentication = () => {
               label="Confirm Password"
               type="password"
               id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           ) : null}
-          <Button type="submit" fullWidth variant="contained" sx={buttonSX}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={buttonSX}
+            disabled={
+              formType === FormType.LOGIN
+                ? !email || !password
+                : !email ||
+                  !password ||
+                  !confirmPassword ||
+                  password !== confirmPassword
+            }
+          >
             {formType === FormType.SIGNUP ? "Sign Up" : "Sign In"}
           </Button>
           <Button

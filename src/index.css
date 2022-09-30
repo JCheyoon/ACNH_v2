@@ -14,6 +14,8 @@
   --light-gray: #efefef;
   --gray: #c6c6c6;
   --black: #000;
+  --red: #ff0000;
+  --red-dark: #b70000;
 }
 
 body {
