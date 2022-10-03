@@ -1,9 +1,10 @@
-import { default as axios } from "axios";
+import { AxiosResponse, default as axios } from "axios";
 
 export const useAxios = () => {
   const BASE_URL = import.meta.env.VITE_API_URL;
 
-  const get = (path: string, token: string) => {
+  //eslint-disable-next-line
+  const get = (path: string, token?: string): any => {
     return axios.get(
       `${BASE_URL}${path}`,
       token
@@ -14,7 +15,8 @@ export const useAxios = () => {
     );
   };
 
-  const post = (path: string, data: any, token?: string) => {
+  //eslint-disable-next-line
+  const post = (path: string, data: any, token?: string): any => {
     return axios.post(
       `${BASE_URL}${path}`,
       data,
@@ -26,7 +28,8 @@ export const useAxios = () => {
     );
   };
 
-  const put = (path: string, data: string, token: string) => {
+  //eslint-disable-next-line
+  const put = (path: string, data: string, token: string): any => {
     return axios.put(
       `${BASE_URL}${path}`,
       data,
@@ -38,7 +41,8 @@ export const useAxios = () => {
     );
   };
 
-  const remove = (path: string, token: string) => {
+  //eslint-disable-next-line
+  const remove = (path: string, token: string): any => {
     return axios.delete(
       `${BASE_URL}${path}`,
       token

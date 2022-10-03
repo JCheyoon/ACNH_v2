@@ -39,11 +39,15 @@ const Authentication = () => {
         const response = await post("/user/login", formFields);
         handleLogin(response.data);
         navigate("/");
+        //TODO
+        console.log("success");
       } catch (e) {
         if ((e as any)?.response?.data?.message === "INVALID_CREDENTIALS") {
           alert("Incorrect password or email");
-        } else if ((e as any)?.message[0].message === "INVALID_FORMAT") {
-          alert("email not registered");
+        } else if (
+          (e as any)?.response?.data?.message[0].message === "INVALID_FORMAT"
+        ) {
+          alert("Email or password has invalid format");
         }
       }
     } else if (formType === FormType.SIGNUP) {
@@ -52,6 +56,7 @@ const Authentication = () => {
         setFormType(FormType.LOGIN);
         resetForm();
       } catch (e) {
+        //TODO
         console.log(e);
       }
     } else {

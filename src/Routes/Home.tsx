@@ -1,5 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import MyIslandVillagerGrid from "../UI/MyIslandVillagerGrid.component";
+import { useContextGameData } from "../Context/gameDataContext";
+import { useEffect } from "react";
+import { useAuthContextData } from "../Context/authContext";
 
 const Home = () => {
   const containerBoxSX = {
@@ -10,6 +13,15 @@ const Home = () => {
     p: 5,
     mt: 8,
   };
+
+  const { getUserAcnhData } = useContextGameData();
+  const { token } = useAuthContextData();
+
+  useEffect(() => {
+    if (token) {
+      getUserAcnhData();
+    }
+  }, [token]);
 
   return (
     <Box sx={containerBoxSX}>

@@ -1,6 +1,8 @@
 import { BoxTitle, GridContainer, VillagerBox } from "./Home.style";
 import { Box, IconButton } from "@mui/material";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import { useAuthContextData } from "../Context/authContext";
+import { useContextGameData } from "../Context/gameDataContext";
 
 const MyIslandVillagerGrid = () => {
   const gridBoxSX = {
@@ -26,24 +28,43 @@ const MyIslandVillagerGrid = () => {
     },
   };
 
+  const { isLoggedIn } = useAuthContextData();
+  const { myVillagers } = useContextGameData();
+
   return (
     <Box sx={gridBoxSX}>
       <BoxTitle>
         <p>Island Villagers</p>
       </BoxTitle>
-      <GridContainer>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index, item) => (
-          <VillagerBox key={index}>
-            <div>
-              <img src="/public/fish.png" />
-            </div>
-            <div>name</div>
-            <IconButton sx={iconButtonSX}>
-              <RemoveCircleIcon />
-            </IconButton>
-          </VillagerBox>
-        ))}
-      </GridContainer>
+      {isLoggedIn ? (
+        <GridContainer>
+          {myVillagers.map((index, _, villager) => (
+            <VillagerBox key={index}>
+              <div>
+                <img src="/public/animalVector.png" />
+              </div>
+              <div>{villager}</div>
+              <IconButton sx={iconButtonSX}>
+                <RemoveCircleIcon />
+              </IconButton>
+            </VillagerBox>
+          ))}
+        </GridContainer>
+      ) : (
+        <GridContainer>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index, item) => (
+            <VillagerBox key={index}>
+              <div>
+                <img src="/public/animalVector.png" />
+              </div>
+              <div>name</div>
+              <IconButton sx={iconButtonSX}>
+                <RemoveCircleIcon />
+              </IconButton>
+            </VillagerBox>
+          ))}
+        </GridContainer>
+      )}
     </Box>
   );
 };

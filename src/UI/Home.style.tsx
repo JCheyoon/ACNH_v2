@@ -45,6 +45,7 @@ export const VillagerBox = styled.div`
     background-color: var(--gray);
     img {
       width: 50px;
+      height: 50px;
     }
   }
   div:nth-child(2) {

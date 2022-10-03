@@ -5,14 +5,22 @@ import { useEffect } from "react";
 import { useContextGameData } from "../Context/gameDataContext";
 import { useContextUi } from "../Context/uiContext";
 import VillagersSearchBar from "../UI/VillagersSearchBar.component";
+import { useAuthContextData } from "../Context/authContext";
 
 const Villagers = () => {
-  const { fetchVillagers } = useContextGameData();
+  const { token } = useAuthContextData();
+  const { fetchVillagers, getUserAcnhData } = useContextGameData();
   const { isLoading } = useContextUi();
 
   useEffect(() => {
     fetchVillagers();
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      getUserAcnhData();
+    }
+  }, [token]);
 
   if (isLoading) {
     return (

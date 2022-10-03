@@ -3,110 +3,14 @@ import { useContextUi } from "./uiContext";
 import { EncyclopediaType } from "../Routes/Encyclopedias";
 import { CollectionType } from "../Routes/Collections";
 import { useAuthContextData } from "./authContext";
-const BASE_URL = import.meta.env.VITE_API_URL;
-
-//villagers Data
-interface VillagerResponse {
-  id: number;
-  name: { "name-USen": string };
-  personality: string;
-  ["birthday-string"]: string;
-  species: string;
-  gender: string;
-  ["catch-phrase"]: string;
-  icon_uri: string;
-  image_uri: string;
-}
-
-export interface VillagerData {
-  id: number;
-  name: string;
-  personality: string;
-  birthdayString: string;
-  species: string;
-  gender: string;
-  catchPhrase: string;
-  iconUrl: string;
-  imageUrl: string;
-}
-
-function mapVillagerData(response: VillagerResponse): VillagerData {
-  return {
-    id: response.id,
-    birthdayString: response["birthday-string"],
-    catchPhrase: response["catch-phrase"],
-    gender: response.gender,
-    iconUrl: response.icon_uri,
-    imageUrl: response.image_uri,
-    name: response.name["name-USen"],
-    personality: response.personality,
-    species: response.species,
-  };
-}
-
-//Items Data
-interface ItemsResponse {
-  id: number;
-  name: { "name-USen": string };
-  availability?: {
-    "month-northern": string;
-    "month-southern": string;
-    time: string;
-    location: string;
-    isAllDay: boolean;
-    isAllYear: boolean;
-  };
-  shadow?: string;
-  price: number;
-  image_uri: string;
-  icon_uri: string;
-  "sell-price"?: string;
-  "buy-price"?: string;
-  variant?: string;
-  size?: string;
-  isDIY?: boolean;
-}
-
-export interface ItemsData {
-  id: number;
-  name: string;
-  imageUrl: string;
-  price?: number;
-  northern?: string;
-  southern?: string;
-  time?: string;
-  location?: string;
-  shadow?: string;
-  sellPrice?: string;
-  buyPrice?: string;
-  isAllDay?: boolean;
-  isAllYear?: boolean;
-  variants?: string[];
-  size?: string;
-  isDIY?: boolean;
-}
-
-function mapItemsData(response: ItemsResponse): ItemsData {
-  return {
-    buyPrice: response["buy-price"],
-    id: response.id,
-    imageUrl: response.icon_uri ?? response.image_uri,
-    location: response.availability?.location,
-    name: response.name["name-USen"],
-    northern: response.availability?.["month-northern"],
-    price: response.price,
-    sellPrice: response["sell-price"],
-    shadow: response.shadow,
-    southern: response.availability?.["month-southern"],
-    time: response.availability?.time,
-    isAllDay: response.availability?.isAllDay,
-    isAllYear: response.availability?.isAllYear,
-    size: response.size,
-    isDIY: response.isDIY,
-  };
-}
-
-/////context
+import { useAxios } from "../Components/Hooks/useAxios";
+import {
+  ItemsData,
+  ItemsResponse,
+  mapItemsData,
+  mapVillagerData,
+  VillagerData,
+} from "./gameDataContextTypes";
 
 export type GameDataContextType = {
   filteredItems: ItemsData[];
@@ -118,7 +22,11 @@ export type GameDataContextType = {
   searchByNameAndSpecies: (searchField: string) => void;
   myVillagers: number[];
   myFavorites: number[];
+  getUserAcnhData: () => Promise<void>;
   handleAddVillager: (villagerId: number) => Promise<void>;
+  handleAddFavorites: (villagerId: number) => Promise<void>;
+  handleRemoveVillager: (villagerId: number) => Promise<void>;
+  handleRemoveFavorites: (villagerId: number) => Promise<void>;
 };
 
 type ProviderProps = {
@@ -128,6 +36,7 @@ type ProviderProps = {
 const GameDataContext = createContext({} as GameDataContextType);
 
 export const GameDataProvider = ({ children }: ProviderProps) => {
+  const { get, post } = useAxios();
   const { setLoading } = useContextUi();
   const [allItems, setAllItems] = useState<ItemsData[]>([]);
   const [filteredItems, setFilteredItems] = useState<ItemsData[]>([]);
@@ -238,16 +147,77 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
 
   const handleAddVillager = async (villagerId: number) => {
     try {
-      const response = await fetch(`${BASE_URL}/village/add`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+      const response = await post(
+        "/acnh/village/add",
+        {
+          villagerId,
         },
-        body: JSON.stringify({ villagerId }),
-      });
-      const { villagers } = await response.json();
+        token
+      );
+      const { villagers } = response.data;
       setMyVillagers(villagers);
+    } catch (e) {
+      //TODO
+      console.log(e);
+    }
+  };
+
+  const handleAddFavorites = async (villagerId: number) => {
+    try {
+      const response = await post(
+        "/acnh/favorites/add",
+        {
+          villagerId,
+        },
+        token
+      );
+      const { villagers } = response.data;
+      setMyFavorites(villagers);
+    } catch (e) {
+      //TODO
+      console.log(e);
+    }
+  };
+  const handleRemoveVillager = async (villagerId: number) => {
+    try {
+      const response = await post(
+        "/acnh/village/remove",
+        {
+          villagerId,
+        },
+        token
+      );
+      const { villagers } = response.data;
+      setMyVillagers(villagers);
+    } catch (e) {
+      //TODO
+      console.log(e);
+    }
+  };
+  const handleRemoveFavorites = async (villagerId: number) => {
+    try {
+      const response = await post(
+        "/acnh/favorites/remove",
+        {
+          villagerId,
+        },
+        token
+      );
+      const { villagers } = response.data;
+      setMyVillagers(villagers);
+    } catch (e) {
+      //TODO
+      console.log(e);
+    }
+  };
+
+  const getUserAcnhData = async () => {
+    try {
+      const response = await get("/acnh", token);
+      const { villagers, favorites } = response.data;
+      setMyVillagers(villagers);
+      setMyFavorites(favorites);
+      console.log(villagers);
     } catch (e) {
       console.log(e);
     }
@@ -263,7 +233,11 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
     searchByNameAndSpecies,
     myVillagers,
     myFavorites,
+    getUserAcnhData,
     handleAddVillager,
+    handleAddFavorites,
+    handleRemoveVillager,
+    handleRemoveFavorites,
   };
   return (
     <GameDataContext.Provider value={value}>
