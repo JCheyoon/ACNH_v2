@@ -6,9 +6,31 @@ export const GridContainer = styled.div`
   justify-content: center;
   justify-items: center;
   align-items: center;
-  grid-template-columns: repeat(5, 70px);
+  grid-template-columns: repeat(3, 70px);
   grid-template-rows: repeat(2, 70px);
-  grid-gap: 7px;
+  grid-gap: 10px;
+  margin: 20px;
+
+  @media (min-width: 350px) {
+    grid-template-columns: repeat(4, 70px);
+  }
+
+  @media (min-width: 410px) {
+    grid-template-columns: repeat(5, 70px);
+  }
+`;
+
+export const EmptyBox = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 250px;
+  @media (min-width: 350px) {
+    width: 300px;
+  }
+
+  @media (min-width: 410px) {
+    width: 400px;
+  }
 `;
 
 export const BoxTitle = styled.div`
@@ -16,21 +38,26 @@ export const BoxTitle = styled.div`
   background-color: var(--primary-main);
   border-radius: 5px;
   position: absolute;
-  top: -18px;
+  top: -23px;
   left: 20px;
   z-index: 3;
+
   p {
     text-align: center;
     font-weight: 600;
     color: var(--white);
     margin: 6px;
   }
+
+  &.fav {
+    width: 155px;
+  }
 `;
 
 export const VillagerBox = styled.div`
   position: relative;
   width: 60px;
-  height: 60px;
+  height: 70px;
   display: flex;
   flex-direction: column;
   justify-content: center;

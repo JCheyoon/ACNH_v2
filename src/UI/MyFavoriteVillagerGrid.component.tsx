@@ -7,13 +7,17 @@ import { useContextGameData } from "../Context/gameDataContext";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 
-const MyIslandVillagerGrid = ({ villagers }: { villagers: VillagerData[] }) => {
+const MyFavoriteVillagerGrid = ({
+  villagers,
+}: {
+  villagers: VillagerData[];
+}) => {
   const gridBoxSX = {
     mt: 6,
     position: "relative",
     backgroundColor: "var(--light-gray)",
     width: "auto",
-    height: 190,
+    height: "auto",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -30,21 +34,25 @@ const MyIslandVillagerGrid = ({ villagers }: { villagers: VillagerData[] }) => {
       color: "var(--red-dark)",
     },
   };
+  const emptyBoxSX = {
+    width: 400,
+  };
 
   const { isLoggedIn } = useAuthContextData();
-  const { handleRemoveVillager } = useContextGameData();
+  const { handleRemoveFavorites } = useContextGameData();
   const navigate = useNavigate();
 
   const gotoAuth = () => {
     navigate("/auth");
   };
+
   const gotoVillager = () => {
     navigate("/villagers");
   };
   return (
     <Box sx={gridBoxSX}>
-      <BoxTitle>
-        <p>Island Villagers</p>
+      <BoxTitle className="fav">
+        <p>Favorite Villagers</p>
       </BoxTitle>
       {isLoggedIn ? (
         villagers.length > 0 ? (
@@ -57,7 +65,7 @@ const MyIslandVillagerGrid = ({ villagers }: { villagers: VillagerData[] }) => {
                 <div>{villager.name}</div>
                 <IconButton
                   sx={iconButtonSX}
-                  onClick={() => handleRemoveVillager(villager.id)}
+                  onClick={() => handleRemoveFavorites(villager.id)}
                 >
                   <RemoveCircleIcon />
                 </IconButton>
@@ -86,4 +94,4 @@ const MyIslandVillagerGrid = ({ villagers }: { villagers: VillagerData[] }) => {
   );
 };
 
-export default MyIslandVillagerGrid;
+export default MyFavoriteVillagerGrid;

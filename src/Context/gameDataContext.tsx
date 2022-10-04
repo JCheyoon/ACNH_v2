@@ -18,6 +18,7 @@ export type GameDataContextType = {
   searchByName: (searchField: string) => void;
   fetchVillagers: () => Promise<void>;
   filterByPersonality: (personality: string) => void;
+  allVillagers: VillagerData[];
   filteredVillagers: VillagerData[];
   searchByNameAndSpecies: (searchField: string) => void;
   myVillagers: number[];
@@ -157,8 +158,9 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
       const { villagers } = response.data;
       setMyVillagers(villagers);
     } catch (e) {
-      //TODO
-      console.log(e);
+      if ((e as any)?.response?.data?.message === "VILLAGE_FULL") {
+        alert("You can only add 10 villagers");
+      }
     }
   };
 
@@ -171,8 +173,8 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
         },
         token
       );
-      const { villagers } = response.data;
-      setMyFavorites(villagers);
+      const { favorites } = response.data;
+      setMyFavorites(favorites);
     } catch (e) {
       //TODO
       console.log(e);
@@ -203,8 +205,8 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
         },
         token
       );
-      const { villagers } = response.data;
-      setMyVillagers(villagers);
+      const { favorites } = response.data;
+      setMyFavorites(favorites);
     } catch (e) {
       //TODO
       console.log(e);
@@ -228,6 +230,7 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
     fetchItems,
     searchByName,
     fetchVillagers,
+    allVillagers,
     filteredVillagers,
     filterByPersonality,
     searchByNameAndSpecies,

@@ -1,4 +1,4 @@
-import { AxiosResponse, default as axios } from "axios";
+import { default as axios } from "axios";
 
 export const useAxios = () => {
   const BASE_URL = import.meta.env.VITE_API_URL;

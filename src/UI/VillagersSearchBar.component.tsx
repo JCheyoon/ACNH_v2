@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Paper, InputBase, IconButton, useMediaQuery } from "@mui/material";
+import { Paper, InputBase, useMediaQuery } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import { useDebounce } from "../Components/Hooks/CustomHook";

@@ -3,12 +3,11 @@ import {
   Box,
   Card,
   CardContent,
-  Chip,
   Grid,
   Typography,
 } from "@mui/material";
-import { ItemsData } from "../Context/gameDataContext";
 import { MyCardItem } from "./CardStyle.style";
+import { ItemsData } from "../Context/gameDataContextTypes";
 
 interface Props {
   item: ItemsData;
@@ -107,7 +106,11 @@ const ItemsCard = ({ item }: Props) => {
               {sellPrice && <MyCardItem>{sellPrice}</MyCardItem>}
               {size && (
                 <MyCardItem>
-                  <img style={{ width: "25px" }} src={`/${size}.png`} />
+                  <img
+                    style={{ width: "25px" }}
+                    src={`/${size}.png`}
+                    alt={`/${size}.png`}
+                  />
                 </MyCardItem>
               )}
             </Grid>
