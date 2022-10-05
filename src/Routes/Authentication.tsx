@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useAuthContextData } from "../Context/authContext";
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "../Components/Hooks/useAxios";
+import { SnackbarSeverity, useContextUi } from "../Context/uiContext";
 
 enum FormType {
   LOGIN = "login",
@@ -22,14 +23,18 @@ const defaultFormValue = {
 
 const Authentication = () => {
   const { post } = useAxios();
-
   const navigate = useNavigate();
   const { handleLogin } = useAuthContextData();
+  const { showSnackbar } = useContextUi();
   const [formType, setFormType] = useState<FormType>(FormType.LOGIN);
   const [formFields, setFormFields] = useState(defaultFormValue);
   const [confirmPassword, setConfirmPassword] = useState("");
-
   const { email, password } = formFields;
+
+  const resetForm = () => {
+    setFormFields({ email: "", password: "" });
+    setConfirmPassword("");
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,15 +44,19 @@ const Authentication = () => {
         const response = await post("/user/login", formFields);
         handleLogin(response.data);
         navigate("/");
-        //TODO
-        console.log("success");
       } catch (e) {
         if ((e as any)?.response?.data?.message === "INVALID_CREDENTIALS") {
-          alert("Incorrect password or email");
+          showSnackbar("Incorrect password or email", SnackbarSeverity.ERROR);
         } else if (
           (e as any)?.response?.data?.message[0].message === "INVALID_FORMAT"
         ) {
-          alert("Email or password has invalid format");
+          showSnackbar(
+            "Email or password has invalid format",
+            SnackbarSeverity.ERROR
+          );
+        } else {
+          console.log(e);
+          return;
         }
       }
     } else if (formType === FormType.SIGNUP) {
@@ -55,17 +64,28 @@ const Authentication = () => {
         await post("/user/signup", formFields);
         setFormType(FormType.LOGIN);
         resetForm();
+        showSnackbar("You can login now!", SnackbarSeverity.SUCCESS);
       } catch (e) {
-        //TODO
-        console.log(e);
+        if (
+          (e as any)?.response?.data?.message[0].message === "INVALID_FORMAT"
+        ) {
+          showSnackbar(
+            "Email or password has invalid format",
+            SnackbarSeverity.ERROR
+          );
+        } else if ((e as any)?.response?.data?.message === "EMAIL_REGISTERED") {
+          showSnackbar("Email already registered", SnackbarSeverity.ERROR);
+        } else {
+          console.log(e);
+          return;
+        }
       }
-    } else {
-      return;
     }
   };
 
   const changeForm = () => {
     setFormType(formType === FormType.LOGIN ? FormType.SIGNUP : FormType.LOGIN);
+    resetForm();
   };
 
   const buttonSX = {
@@ -81,10 +101,7 @@ const Authentication = () => {
     const { name, value } = event.target as HTMLInputElement;
     setFormFields({ ...formFields, [name]: value });
   };
-  const resetForm = () => {
-    setFormFields({ email: "", password: "" });
-    setConfirmPassword("");
-  };
+
   return (
     <Container component="main" maxWidth="xs" sx={{ p: 5, mt: 8 }}>
       <CssBaseline />

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "../Components/Hooks/useAxios";
+import { SnackbarSeverity, useContextUi } from "./uiContext";
 
 const STORAGE_KEY = "acnh-user";
 const ONE_DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
@@ -27,6 +28,7 @@ const AuthContext = createContext({} as AuthContextType);
 
 export const AuthProvider = ({ children }: ProviderProps) => {
   const { post } = useAxios();
+  const { showSnackbar } = useContextUi();
 
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -93,6 +95,7 @@ export const AuthProvider = ({ children }: ProviderProps) => {
       );
     } catch (e) {
       console.log("Could not refresh token", e);
+      showSnackbar("Oops! Could not refresh token!", SnackbarSeverity.ERROR);
     }
   };
 

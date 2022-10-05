@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { GridBox } from "../UI/CardStyle.style";
 import { useEffect } from "react";
 import ItemsCard from "../UI/ItemsCard.component";
 import { useContextGameData } from "../Context/gameDataContext";
 import ItemSearchBar from "../UI/ItemSearchBar.component";
 import { useContextUi } from "../Context/uiContext";
+import LoadingCircular from "../UI/LoadingCircular.component";
 
 export enum EncyclopediaType {
   BUGS = "bugs",
@@ -34,7 +35,7 @@ const Encyclopedias = () => {
           padding: "30vh",
         }}
       >
-        <CircularProgress />
+        <LoadingCircular />
       </Box>
     );
   }

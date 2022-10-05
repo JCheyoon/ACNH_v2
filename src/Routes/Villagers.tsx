@@ -6,6 +6,7 @@ import { useContextGameData } from "../Context/gameDataContext";
 import { useContextUi } from "../Context/uiContext";
 import VillagersSearchBar from "../UI/VillagersSearchBar.component";
 import { useAuthContextData } from "../Context/authContext";
+import LoadingCircular from "../UI/LoadingCircular.component";
 
 const Villagers = () => {
   const { token } = useAuthContextData();
@@ -31,7 +32,7 @@ const Villagers = () => {
           padding: "30vh",
         }}
       >
-        <CircularProgress />
+        <LoadingCircular />
       </Box>
     );
   }

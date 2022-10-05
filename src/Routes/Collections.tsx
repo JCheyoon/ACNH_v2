@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-
-import { Box, CircularProgress, Grid } from "@mui/material";
+import LoadingCircular from "../UI/LoadingCircular.component";
+import { Box, Grid } from "@mui/material";
 import ItemSearchBar from "../UI/ItemSearchBar.component";
 import { GridBox } from "../UI/CardStyle.style";
 import ItemsCard from "../UI/ItemsCard.component";
@@ -34,7 +34,7 @@ const Collections = () => {
           padding: "30vh",
         }}
       >
-        <CircularProgress />
+        <LoadingCircular />
       </Box>
     );
   }

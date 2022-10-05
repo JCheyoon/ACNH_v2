@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { useContextUi } from "./uiContext";
+import { SnackbarSeverity, useContextUi } from "./uiContext";
 import { EncyclopediaType } from "../Routes/Encyclopedias";
 import { CollectionType } from "../Routes/Collections";
 import { useAuthContextData } from "./authContext";
@@ -38,7 +38,7 @@ const GameDataContext = createContext({} as GameDataContextType);
 
 export const GameDataProvider = ({ children }: ProviderProps) => {
   const { get, post } = useAxios();
-  const { setLoading } = useContextUi();
+  const { setLoading, showSnackbar } = useContextUi();
   const [allItems, setAllItems] = useState<ItemsData[]>([]);
   const [filteredItems, setFilteredItems] = useState<ItemsData[]>([]);
   const [allVillagers, setAllVillagers] = useState<VillagerData[]>([]);
@@ -76,7 +76,7 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
       setFilteredItems([...items]);
     } catch (e) {
       console.log(e);
-      // TODO handle error
+      showSnackbar("Oops! something went wrong!", SnackbarSeverity.ERROR);
     } finally {
       setLoading(false);
     }
@@ -103,7 +103,7 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
       localStorage.setItem("villagers", JSON.stringify(villagers));
     } catch (e) {
       console.log(e);
-      // TODO handle error
+      showSnackbar("Oops! something went wrong!", SnackbarSeverity.ERROR);
     } finally {
       setLoading(false);
     }
@@ -157,9 +157,10 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
       );
       const { villagers } = response.data;
       setMyVillagers(villagers);
+      showSnackbar("successfully added!", SnackbarSeverity.SUCCESS);
     } catch (e) {
       if ((e as any)?.response?.data?.message === "VILLAGE_FULL") {
-        alert("You can only add 10 villagers");
+        showSnackbar("You can only add 10 villagers", SnackbarSeverity.ERROR);
       }
     }
   };
@@ -175,9 +176,9 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
       );
       const { favorites } = response.data;
       setMyFavorites(favorites);
+      showSnackbar("successfully added!", SnackbarSeverity.SUCCESS);
     } catch (e) {
-      //TODO
-      console.log(e);
+      showSnackbar("Oops! something went wrong!", SnackbarSeverity.ERROR);
     }
   };
   const handleRemoveVillager = async (villagerId: number) => {
@@ -191,9 +192,9 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
       );
       const { villagers } = response.data;
       setMyVillagers(villagers);
+      showSnackbar("Successfully deleted", SnackbarSeverity.SUCCESS);
     } catch (e) {
-      //TODO
-      console.log(e);
+      showSnackbar("Oops! something went wrong!", SnackbarSeverity.ERROR);
     }
   };
   const handleRemoveFavorites = async (villagerId: number) => {
@@ -207,9 +208,9 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
       );
       const { favorites } = response.data;
       setMyFavorites(favorites);
+      showSnackbar("Successfully deleted", SnackbarSeverity.SUCCESS);
     } catch (e) {
-      //TODO
-      console.log(e);
+      showSnackbar("Oops! something went wrong!", SnackbarSeverity.ERROR);
     }
   };
 
@@ -219,7 +220,6 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
       const { villagers, favorites } = response.data;
       setMyVillagers(villagers);
       setMyFavorites(favorites);
-      console.log(villagers);
     } catch (e) {
       console.log(e);
     }
