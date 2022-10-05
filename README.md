@@ -2,6 +2,9 @@
 
 Fan site for Animal Crossing New Horizons (Nintendo game)
 
+### Public pages:
+![](https://storage.jcheyoon.com/acnh.gif)
+
 ### Features:
 -  **Authentication state in frontend -**
    Visitors can sign up and login, logout.
