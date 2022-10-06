@@ -2,8 +2,14 @@
 
 Fan site for Animal Crossing New Horizons (Nintendo game)
 
+You can check my old ACNH code that written in vanilla javascript and see how I am improved!
+> [>> Check the old code here](https://github.com/JCheyoon/ACNH)
+
+
 ### Public pages:
 ![](https://storage.jcheyoon.com/acnh.gif)
+
+> [>> Check it out here!](https://acnh.jcheyoon.com/)
 
 ### Features:
 -  **Authentication state in frontend -**
