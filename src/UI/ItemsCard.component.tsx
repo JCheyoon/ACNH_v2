@@ -18,15 +18,14 @@ const ItemsCard = ({ item }: Props) => {
     name,
     location,
     price,
-    northern,
-    southern,
+    north,
+    south,
     time,
     shadow,
     imageUrl,
-    sellPrice,
-    buyPrice,
+    sell_nook,
+    buy,
     isAllDay,
-    isAllYear,
     variants,
     size,
     isDIY,
@@ -74,19 +73,12 @@ const ItemsCard = ({ item }: Props) => {
               {location && <MyCardItem className="title">Location</MyCardItem>}
               {shadow && <MyCardItem className="title">Shadow</MyCardItem>}
               {price && <MyCardItem className="title">Price</MyCardItem>}
-              {(northern || (!northern && isAllYear)) && (
-                <MyCardItem className="title">Northern</MyCardItem>
-              )}
-              {(southern || (!southern && isAllYear)) && (
-                <MyCardItem className="title">Southern</MyCardItem>
-              )}
-              {(time || (!time && isAllDay)) && (
-                <MyCardItem className="title">Time</MyCardItem>
-              )}
-              {(buyPrice || isDIY) && (
+              {north && <MyCardItem className="title">Northern</MyCardItem>}
+              {south && <MyCardItem className="title">Southern</MyCardItem>}
+              {(buy || isDIY) && (
                 <MyCardItem className="title">BuyPrice</MyCardItem>
               )}
-              {sellPrice && (
+              {sell_nook && (
                 <MyCardItem className="title">SellPrice</MyCardItem>
               )}
               {size && <MyCardItem className="title">Size</MyCardItem>}
@@ -95,15 +87,13 @@ const ItemsCard = ({ item }: Props) => {
               {location && <MyCardItem>{location}</MyCardItem>}
               {shadow && <MyCardItem>{shadow}</MyCardItem>}
               {price && <MyCardItem>{price}</MyCardItem>}
-              {northern && <MyCardItem>{northern}</MyCardItem>}
-              {!northern && isAllYear && <MyCardItem>All year</MyCardItem>}
-              {southern && <MyCardItem>{southern}</MyCardItem>}
-              {!southern && isAllYear && <MyCardItem>All year</MyCardItem>}
+              {north && <MyCardItem>{north}</MyCardItem>}
+              {south && <MyCardItem>{south}</MyCardItem>}
               {time && <MyCardItem>{time}</MyCardItem>}
               {!time && isAllDay && <MyCardItem>All day</MyCardItem>}
-              {buyPrice && <MyCardItem>{buyPrice}</MyCardItem>}
-              {!buyPrice && isDIY && <MyCardItem>DIY items</MyCardItem>}
-              {sellPrice && <MyCardItem>{sellPrice}</MyCardItem>}
+              {buy && <MyCardItem>{buy}</MyCardItem>}
+              {!buy && isDIY && <MyCardItem>DIY items</MyCardItem>}
+              {sell_nook && <MyCardItem>{sell_nook}</MyCardItem>}
               {size && (
                 <MyCardItem>
                   <img

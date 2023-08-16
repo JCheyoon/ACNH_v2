@@ -1,37 +1,37 @@
 //villagers Data
 interface VillagerResponse {
   id: number;
-  name: { "name-USen": string };
+  name: string;
   personality: string;
-  ["birthday-string"]: string;
+  birthday_month: string;
+  birthday_day: string;
   species: string;
   gender: string;
-  ["catch-phrase"]: string;
-  icon_uri: string;
-  image_uri: string;
+  phrase: string;
+  image_url: string;
 }
 
 export interface VillagerData {
   id: number;
   name: string;
   personality: string;
-  birthdayString: string;
+  birthdayMonth: string;
+  birthdayDay: string;
   species: string;
   gender: string;
-  catchPhrase: string;
-  iconUrl: string;
+  phrase: string;
   imageUrl: string;
 }
 
 export function mapVillagerData(response: VillagerResponse): VillagerData {
   return {
     id: response.id,
-    birthdayString: response["birthday-string"],
-    catchPhrase: response["catch-phrase"],
+    birthdayMonth: response.birthday_month,
+    birthdayDay: response.birthday_day,
+    phrase: response.phrase,
     gender: response.gender,
-    iconUrl: response.icon_uri,
-    imageUrl: response.image_uri,
-    name: response.name["name-USen"],
+    imageUrl: response.image_url,
+    name: response.name,
     personality: response.personality,
     species: response.species,
   };
@@ -40,21 +40,25 @@ export function mapVillagerData(response: VillagerResponse): VillagerData {
 //Items Data
 export interface ItemsResponse {
   id: number;
-  name: { "name-USen": string };
-  availability?: {
-    "month-northern": string;
-    "month-southern": string;
-    time: string;
-    location: string;
-    isAllDay: boolean;
-    isAllYear: boolean;
+  name: string;
+  north?: {
+    availability_array: {
+      months: string;
+      time: string;
+    }[];
   };
+  south?: {
+    availability_array: {
+      months: string;
+      time: string;
+    }[];
+  };
+  location?: string;
   shadow?: string;
   price: number;
-  image_uri: string;
-  icon_uri: string;
-  "sell-price"?: string;
-  "buy-price"?: string;
+  image_url: string;
+  sell_nook?: string;
+  buy?: string;
   variant?: string;
   size?: string;
   isDIY?: boolean;
@@ -65,13 +69,13 @@ export interface ItemsData {
   name: string;
   imageUrl: string;
   price?: number;
-  northern?: string;
-  southern?: string;
+  north?: string;
+  south?: string;
   time?: string;
   location?: string;
   shadow?: string;
-  sellPrice?: string;
-  buyPrice?: string;
+  sell_nook?: string;
+  buy?: string;
   isAllDay?: boolean;
   isAllYear?: boolean;
   variants?: string[];
@@ -81,19 +85,16 @@ export interface ItemsData {
 
 export function mapItemsData(response: ItemsResponse): ItemsData {
   return {
-    buyPrice: response["buy-price"],
+    buy: response.buy,
     id: response.id,
-    imageUrl: response.icon_uri ?? response.image_uri,
-    location: response.availability?.location,
-    name: response.name["name-USen"],
-    northern: response.availability?.["month-northern"],
+    imageUrl: response.image_url,
+    location: response.location,
+    name: response.name,
+    north: response.north?.availability_array[0]?.months,
     price: response.price,
-    sellPrice: response["sell-price"],
+    sell_nook: response.sell_nook,
     shadow: response.shadow,
-    southern: response.availability?.["month-southern"],
-    time: response.availability?.time,
-    isAllDay: response.availability?.isAllDay,
-    isAllYear: response.availability?.isAllYear,
+    south: response.south?.availability_array[0]?.months,
     size: response.size,
     isDIY: response.isDIY,
   };

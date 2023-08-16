@@ -49,13 +49,15 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
   const [myFavorites, setMyFavorites] = useState<number[]>([]);
 
   const { token } = useAuthContextData();
-
+  const API_KEY = import.meta.env.VITE_ACNH_API_KEY;
   const fetchItems = async function (
     address: EncyclopediaType | CollectionType
   ) {
     try {
       setLoading(true);
-      const res = await fetch(`https://acnhapi.com/v1a/${address}/`);
+      const res = await fetch(
+        `https://api.nookipedia.com/nh/${address}?api_key=${API_KEY}`
+      );
       const data = await res.json();
       if (!data) {
         return;
@@ -64,7 +66,7 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
         if (Array.isArray(item)) {
           const myItem = mapItemsData(item[0]);
           const rawVariants = item
-            .map((i: ItemsResponse) => i.image_uri)
+            .map((i: ItemsResponse) => i.image_url)
             .filter((i: string | undefined) => !!i) as string[];
           myItem.variants = Array.from(new Set(rawVariants));
           return myItem;
@@ -92,7 +94,9 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
         setFilteredVillagers([...villagers]);
         return;
       }
-      const res = await fetch("https://acnhapi.com/v1a/villagers/");
+      const res = await fetch(
+        `https://api.nookipedia.com/villagers?api_key=${API_KEY}`
+      );
       const data = await res.json();
       if (!data) {
         return;

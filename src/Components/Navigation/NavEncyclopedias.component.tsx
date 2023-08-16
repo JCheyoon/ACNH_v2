@@ -54,7 +54,7 @@ const NavEncyclopedias = () => {
         <MyLink to={`/encyclopedia/${EncyclopediaType.SEA_CREATURES}`}>
           <MenuItem onClick={handleClose}>Sea Creatures</MenuItem>
         </MyLink>
-        <MyLink to={`/encyclopedia/${EncyclopediaType.FOSSILS}`}>
+        <MyLink to={`/encyclopedia/${EncyclopediaType.FOSSILS}/individuals`}>
           <MenuItem onClick={handleClose}>Fossils</MenuItem>
         </MyLink>
         <MyLink to={`/encyclopedia/${EncyclopediaType.ARTS}`}>

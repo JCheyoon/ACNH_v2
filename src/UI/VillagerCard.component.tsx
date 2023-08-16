@@ -26,12 +26,12 @@ const VillagerCard = ({ villager }: Props) => {
     id,
     name,
     species,
-    catchPhrase,
-    iconUrl,
+    phrase,
     imageUrl,
     gender,
     personality,
-    birthdayString,
+    birthdayMonth,
+    birthdayDay,
   } = villager;
   const { isLoggedIn } = useAuthContextData();
   const {
@@ -60,9 +60,6 @@ const VillagerCard = ({ villager }: Props) => {
     <Card sx={{ width: 345, position: "relative", overflow: "unset" }}>
       <CardHeader
         sx={{ backgroundColor: "var(--primary-main)" }}
-        avatar={
-          <CardMedia component="img" height="40" image={iconUrl} alt="icon" />
-        }
         action={
           isLoggedIn ? (
             <>
@@ -115,14 +112,19 @@ const VillagerCard = ({ villager }: Props) => {
       />
       <CardMedia
         component="img"
-        height="345"
+        style={{
+          width: "100%",
+          height: "auto",
+          objectFit: "contain",
+          maxHeight: "300px",
+        }}
         image={imageUrl}
         alt={name}
         sx={{ p: 3, backgroundColor: "var(--light-gray)" }}
       />
       <CatchPhrase>
         <CatchPhraseBubble />
-        <div>{catchPhrase}</div>
+        <div>{phrase}</div>
       </CatchPhrase>
       <CardContent sx={{ backgroundColor: "var(--light-gray)" }}>
         <Box sx={{ flexGrow: 1 }}>
@@ -134,7 +136,10 @@ const VillagerCard = ({ villager }: Props) => {
             </Grid>
             <Grid item xs={8}>
               <MyCardItem>{personality}</MyCardItem>
-              <MyCardItem>{birthdayString}</MyCardItem>
+              <MyCardItem>
+                {birthdayMonth}&nbsp;{birthdayDay}
+                {birthdayMonth === "" ? "No Information" : null}
+              </MyCardItem>
               <MyCardItem>{species}</MyCardItem>
             </Grid>
           </Grid>

@@ -52,7 +52,7 @@ const MyIslandVillagerGrid = ({ villagers }: { villagers: VillagerData[] }) => {
             {villagers.map((villager, index) => (
               <VillagerBox key={index}>
                 <div>
-                  <img src={villager.iconUrl} alt={villager.iconUrl} />
+                  <img src={villager.imageUrl} alt={villager.imageUrl} />
                 </div>
                 <div>{villager.name}</div>
                 <IconButton
