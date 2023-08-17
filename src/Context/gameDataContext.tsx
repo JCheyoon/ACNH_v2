@@ -50,7 +50,7 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
   const [myFavorites, setMyFavorites] = useState<number[]>([]);
 
   const { token } = useAuthContextData();
-  const API_KEY = import.meta.env.VITE_ACNH_API_KEY;
+  const API_KEY = import.meta.env.VITE_API_KEY;
   const fetchItems = async function (
     address: EncyclopediaType | CollectionType
   ) {
