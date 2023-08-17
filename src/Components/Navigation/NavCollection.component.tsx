@@ -47,13 +47,13 @@ const NavCollection = () => {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MyLink to={`/collections/${CollectionType.HOUSEWARES}`}>
-          <MenuItem onClick={handleClose}>Housewares</MenuItem>
+        <MyLink to={`/collections/${CollectionType.FURNITURE}`}>
+          <MenuItem onClick={handleClose}>Furniture</MenuItem>
         </MyLink>
-        <MyLink to={`/collections/${CollectionType.WALL_MOUNTED}`}>
-          <MenuItem onClick={handleClose}>WallMounted</MenuItem>
+        <MyLink to={`/collections/${CollectionType.INTERIOR}`}>
+          <MenuItem onClick={handleClose}>Interior</MenuItem>
         </MyLink>
-        <MyLink to={`/collections/${CollectionType.MISC}`}>
+        <MyLink to={`/collections/${CollectionType.ITEMS}`}>
           <MenuItem onClick={handleClose}>Miscellaneous</MenuItem>
         </MyLink>
       </Menu>

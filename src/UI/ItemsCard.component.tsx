@@ -17,18 +17,15 @@ const ItemsCard = ({ item }: Props) => {
   const {
     name,
     location,
-    price,
     north,
     south,
-    time,
     shadow,
     imageUrl,
-    sell_nook,
+    sellNook,
     buy,
-    isAllDay,
-    variants,
+    variations,
     size,
-    isDIY,
+    artPic,
   } = item;
 
   return (
@@ -49,7 +46,7 @@ const ItemsCard = ({ item }: Props) => {
       >
         <Avatar
           sx={{ width: 90, height: 90, backgroundColor: "var(--white)" }}
-          src={imageUrl}
+          src={imageUrl ?? artPic}
         ></Avatar>
         <Typography
           style={{
@@ -72,28 +69,19 @@ const ItemsCard = ({ item }: Props) => {
             <Grid item xs={4}>
               {location && <MyCardItem className="title">Location</MyCardItem>}
               {shadow && <MyCardItem className="title">Shadow</MyCardItem>}
-              {price && <MyCardItem className="title">Price</MyCardItem>}
               {north && <MyCardItem className="title">Northern</MyCardItem>}
               {south && <MyCardItem className="title">Southern</MyCardItem>}
-              {(buy || isDIY) && (
-                <MyCardItem className="title">BuyPrice</MyCardItem>
-              )}
-              {sell_nook && (
-                <MyCardItem className="title">SellPrice</MyCardItem>
-              )}
+              {buy && <MyCardItem className="title">BuyPrice</MyCardItem>}
+              {sellNook && <MyCardItem className="title">SellPrice</MyCardItem>}
               {size && <MyCardItem className="title">Size</MyCardItem>}
             </Grid>
             <Grid item xs={8}>
               {location && <MyCardItem>{location}</MyCardItem>}
               {shadow && <MyCardItem>{shadow}</MyCardItem>}
-              {price && <MyCardItem>{price}</MyCardItem>}
               {north && <MyCardItem>{north}</MyCardItem>}
               {south && <MyCardItem>{south}</MyCardItem>}
-              {time && <MyCardItem>{time}</MyCardItem>}
-              {!time && isAllDay && <MyCardItem>All day</MyCardItem>}
               {buy && <MyCardItem>{buy}</MyCardItem>}
-              {!buy && isDIY && <MyCardItem>DIY items</MyCardItem>}
-              {sell_nook && <MyCardItem>{sell_nook}</MyCardItem>}
+              {sellNook && <MyCardItem>{sellNook}</MyCardItem>}
               {size && (
                 <MyCardItem>
                   <img
@@ -106,7 +94,7 @@ const ItemsCard = ({ item }: Props) => {
             </Grid>
           </Grid>
         </Box>
-        {variants && variants.length > 0 && (
+        {variations && variations.length > 0 && (
           <Box
             sx={{
               backgroundColor: "var(--white)",
@@ -119,9 +107,9 @@ const ItemsCard = ({ item }: Props) => {
               <MyCardItem className="title">Variants</MyCardItem>
             </Box>
             <Box sx={{ overflowX: "auto", display: "flex", p: 2 }}>
-              {variants &&
-                variants.length > 0 &&
-                variants.map((variant, index) => (
+              {variations &&
+                variations.length > 0 &&
+                variations.map((variant, index) => (
                   <Avatar
                     key={index}
                     sx={{

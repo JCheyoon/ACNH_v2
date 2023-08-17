@@ -1,4 +1,7 @@
 //villagers Data
+import { EncyclopediaType } from "../Routes/Encyclopedias";
+import { CollectionType } from "../Routes/Collections";
+
 interface VillagerResponse {
   id: number;
   name: string;
@@ -53,49 +56,79 @@ export interface ItemsResponse {
       time: string;
     }[];
   };
+  real_info?: {
+    image_url: string;
+  };
   location?: string;
-  shadow?: string;
-  price: number;
+  shadow_size?: string;
   image_url: string;
   sell_nook?: string;
-  buy?: string;
-  variant?: string;
+  buy?: string | { price: string }[];
+  variations?: {
+    variation: string;
+    image_url: string;
+  }[];
+
   size?: string;
-  isDIY?: boolean;
 }
 
 export interface ItemsData {
   id: number;
   name: string;
   imageUrl: string;
-  price?: number;
   north?: string;
   south?: string;
-  time?: string;
   location?: string;
   shadow?: string;
-  sell_nook?: string;
+  sellNook?: string;
   buy?: string;
-  isAllDay?: boolean;
-  isAllYear?: boolean;
-  variants?: string[];
+  variations?: string[];
+
   size?: string;
-  isDIY?: boolean;
+  artPic?: string;
+}
+
+function getPicture(response: ItemsResponse) {
+  if (response.real_info) {
+    return response.real_info?.image_url;
+  } else if (response.variations?.length && response.variations[0]) {
+    return response.variations[0].image_url;
+  }
+}
+function getBuyPrice(response: ItemsResponse) {
+  if (typeof response.buy === "string") {
+    return response.buy;
+  } else if (Array.isArray(response.buy) && response.buy[0]) {
+    return response.buy[0].price;
+  }
 }
 
 export function mapItemsData(response: ItemsResponse): ItemsData {
   return {
-    buy: response.buy,
+    buy: getBuyPrice(response),
     id: response.id,
     imageUrl: response.image_url,
     location: response.location,
     name: response.name,
     north: response.north?.availability_array[0]?.months,
-    price: response.price,
-    sell_nook: response.sell_nook,
-    shadow: response.shadow,
+    sellNook: response.sell_nook,
+    shadow: response.shadow_size,
     south: response.south?.availability_array[0]?.months,
+    artPic: getPicture(response),
     size: response.size,
-    isDIY: response.isDIY,
+    variations: response.variations?.length
+      ? response.variations.map(({ image_url }) => image_url)
+      : [],
   };
 }
+
+export const endpoints: Record<EncyclopediaType | CollectionType, string> = {
+  [EncyclopediaType.BUGS]: "bugs",
+  [EncyclopediaType.FOSSILS]: "fossils/individuals",
+  [EncyclopediaType.ARTS]: "art",
+  [EncyclopediaType.FISH]: "fish",
+  [EncyclopediaType.SEA_CREATURES]: "sea",
+  [CollectionType.FURNITURE]: "furniture",
+  [CollectionType.INTERIOR]: "interior",
+  [CollectionType.ITEMS]: "items",
+};

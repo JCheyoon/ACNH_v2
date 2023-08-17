@@ -18,7 +18,7 @@ const VillagersFilter = () => {
         "Peppy",
         "Smug",
         "Snooty",
-        "Uchi",
+        "Big sister",
       ].map((personality, index) => (
         <Button
           onClick={() => filterByPersonality(personality)}

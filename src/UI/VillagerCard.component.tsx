@@ -61,7 +61,7 @@ const VillagerCard = ({ villager }: Props) => {
       <CardHeader
         sx={{ backgroundColor: "var(--primary-main)" }}
         action={
-          isLoggedIn ? (
+          isLoggedIn && id ? (
             <>
               <IconButton
                 onClick={

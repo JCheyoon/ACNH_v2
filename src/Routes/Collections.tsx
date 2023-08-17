@@ -9,9 +9,9 @@ import { useEffect } from "react";
 import { useContextUi } from "../Context/uiContext";
 
 export enum CollectionType {
-  HOUSEWARES = "houseware",
-  WALL_MOUNTED = "wallmounted",
-  MISC = "misc",
+  FURNITURE = "furniture",
+  INTERIOR = "interior",
+  ITEMS = "items",
 }
 
 const Collections = () => {

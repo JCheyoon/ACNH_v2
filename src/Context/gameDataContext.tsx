@@ -5,6 +5,7 @@ import { CollectionType } from "../Routes/Collections";
 import { useAuthContextData } from "./authContext";
 import { useAxios } from "../Components/Hooks/useAxios";
 import {
+  endpoints,
   ItemsData,
   ItemsResponse,
   mapItemsData,
@@ -56,23 +57,23 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
     try {
       setLoading(true);
       const res = await fetch(
-        `https://api.nookipedia.com/nh/${address}?api_key=${API_KEY}`
+        `https://api.nookipedia.com/nh/${endpoints[address]}?api_key=${API_KEY}`
       );
       const data = await res.json();
       if (!data) {
         return;
       }
-      const items = data.map((item: ItemsResponse | ItemsResponse[]) => {
-        if (Array.isArray(item)) {
-          const myItem = mapItemsData(item[0]);
-          const rawVariants = item
-            .map((i: ItemsResponse) => i.image_url)
-            .filter((i: string | undefined) => !!i) as string[];
-          myItem.variants = Array.from(new Set(rawVariants));
-          return myItem;
-        } else {
-          return mapItemsData(item);
-        }
+      const items = data.map((item: ItemsResponse) => {
+        // if (Array.isArray(item)) {
+        //   const myItem = mapItemsData(item[0]);
+        //   const rawVariants = item
+        //     .map((i: ItemsResponse) => i.image_url)
+        //     .filter((i: string | undefined) => !!i) as string[];
+        //   myItem.variations = Array.from(new Set(rawVariants));
+        //   return myItem;
+        // } else {
+        return mapItemsData(item);
+        // }
       });
       setAllItems(items);
       setFilteredItems([...items]);
