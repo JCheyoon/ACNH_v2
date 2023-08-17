@@ -64,16 +64,7 @@ export const GameDataProvider = ({ children }: ProviderProps) => {
         return;
       }
       const items = data.map((item: ItemsResponse) => {
-        // if (Array.isArray(item)) {
-        //   const myItem = mapItemsData(item[0]);
-        //   const rawVariants = item
-        //     .map((i: ItemsResponse) => i.image_url)
-        //     .filter((i: string | undefined) => !!i) as string[];
-        //   myItem.variations = Array.from(new Set(rawVariants));
-        //   return myItem;
-        // } else {
         return mapItemsData(item);
-        // }
       });
       setAllItems(items);
       setFilteredItems([...items]);
