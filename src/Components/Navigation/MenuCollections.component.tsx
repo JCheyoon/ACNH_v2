@@ -39,19 +39,19 @@ const MenuCollections = ({ closeDrawer }: Props) => {
             to={`/collections/${CollectionType.FURNITURE}`}
             onClick={closeDrawer}
           >
-            <MenuItems title="Furniture" image="/public/collection.png" />
+            <MenuItems title="Furniture" image="/collection.png" />
           </MyLink>
           <MyLink
             to={`/collections/${CollectionType.INTERIOR}`}
             onClick={closeDrawer}
           >
-            <MenuItems title="Interior" image="/public/collection.png" />
+            <MenuItems title="Interior" image="/collection.png" />
           </MyLink>
           <MyLink
             to={`/collections/${CollectionType.ITEMS}`}
             onClick={closeDrawer}
           >
-            <MenuItems title="Miscellaneous" image="/public/collection.png" />
+            <MenuItems title="Miscellaneous" image="/collection.png" />
           </MyLink>
         </List>
       </AccordionDetails>

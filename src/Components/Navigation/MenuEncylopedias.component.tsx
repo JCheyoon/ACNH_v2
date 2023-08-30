@@ -45,31 +45,31 @@ const MenuEncyclopedias = ({ closeDrawer }: Props) => {
             to={`/encyclopedia/${EncyclopediaType.BUGS}`}
             onClick={closeDrawer}
           >
-            <MenuItems title="Bugs" image="/public/bugs.png" />
+            <MenuItems title="Bugs" image="/bugs.png" />
           </MyLink>
           <MyLink
             to={`/encyclopedia/${EncyclopediaType.FISH}`}
             onClick={closeDrawer}
           >
-            <MenuItems title="Fish" image="/public/fish.png" />
+            <MenuItems title="Fish" image="/fish.png" />
           </MyLink>
           <MyLink
             to={`/encyclopedia/${EncyclopediaType.SEA_CREATURES}`}
             onClick={closeDrawer}
           >
-            <MenuItems title="Sea Creatures" image="/public/seaCreatures.png" />
+            <MenuItems title="Sea Creatures" image="seaCreatures.png" />
           </MyLink>
           <MyLink
             to={`/encyclopedia/${EncyclopediaType.FOSSILS}`}
             onClick={closeDrawer}
           >
-            <MenuItems title="Fossils" image="/public/fossils.png" />
+            <MenuItems title="Fossils" image="fossils.png" />
           </MyLink>
           <MyLink
             to={`/encyclopedia/${EncyclopediaType.ARTS}`}
             onClick={closeDrawer}
           >
-            <MenuItems title="Arts" image="/public/art.png" />
+            <MenuItems title="Arts" image="/art.png" />
           </MyLink>
         </List>
       </AccordionDetails>

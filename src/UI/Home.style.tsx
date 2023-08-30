@@ -70,9 +70,11 @@ export const VillagerBox = styled.div`
     width: 100%;
     height: 100%;
     background-color: var(--gray);
+
     img {
       width: 50px;
       height: 50px;
+      padding: 5px;
     }
   }
   div:nth-child(2) {

@@ -121,6 +121,7 @@ const VillagerCard = ({ villager }: Props) => {
         image={imageUrl}
         alt={name}
         sx={{ p: 3, backgroundColor: "var(--light-gray)" }}
+        loading="lazy"
       />
       <CatchPhrase>
         <CatchPhraseBubble />
